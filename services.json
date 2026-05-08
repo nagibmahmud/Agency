@@ -1,0 +1,40 @@
+{
+    "services": [
+        {
+            "id": 1,
+            "title": "Web Development",
+            "description": "Custom websites and web applications built with modern technologies. We create responsive, fast, and secure web solutions tailored to your business needs.",
+            "icon": "fas fa-code"
+        },
+        {
+            "id": 2,
+            "title": "UI/UX Design",
+            "description": "Beautiful and intuitive user interfaces that enhance user experience. Our design team creates engaging designs that convert visitors into customers.",
+            "icon": "fas fa-palette"
+        },
+        {
+            "id": 3,
+            "title": "Digital Marketing",
+            "description": "Comprehensive digital marketing strategies to grow your online presence. We offer SEO, social media marketing, and content marketing services.",
+            "icon": "fas fa-bullhorn"
+        },
+        {
+            "id": 4,
+            "title": "Mobile Apps",
+            "description": "Native and cross-platform mobile applications for iOS and Android. We build apps that provide seamless user experiences across all devices.",
+            "icon": "fas fa-mobile-alt"
+        },
+        {
+            "id": 5,
+            "title": "Cloud Solutions",
+            "description": "Scalable cloud infrastructure and migration services. We help businesses leverage cloud technology for improved efficiency and cost savings.",
+            "icon": "fas fa-cloud"
+        },
+        {
+            "id": 6,
+            "title": "Consulting",
+            "description": "Expert business and technical consulting to help you make informed decisions. We analyze your needs and provide strategic recommendations.",
+            "icon": "fas fa-chart-line"
+        }
+    ]
+}

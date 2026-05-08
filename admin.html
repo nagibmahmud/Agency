@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agency - Admin Panel</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+      <style>
+          /* Login Overlay Styles */
+          #loginOverlay {
+              position: fixed;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              background: rgba(0, 0, 0, 0.9);
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              z-index: 10000;
+          }
+          #loginOverlay.hidden {
+              display: none;
+          }
+          .login-box {
+              background: var(--white);
+              padding: 40px;
+              border-radius: 20px;
+              text-align: center;
+              max-width: 400px;
+              width: 90%;
+              box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+          }
+          body.dark-mode .login-box {
+              background: rgba(60, 60, 75, 0.95);
+              border: 2px solid rgba(255, 255, 255, 0.2);
+          }
+          .login-box i {
+              font-size: 3rem;
+              color: var(--primary-color);
+              margin-bottom: 20px;
+          }
+          .login-box h2 {
+              color: var(--dark-color);
+              margin-bottom: 10px;
+          }
+          body.dark-mode .login-box h2 {
+              color: #ffffff;
+          }
+          .login-box p {
+              color: var(--gray);
+              margin-bottom: 25px;
+          }
+          body.dark-mode .login-box p {
+              color: rgba(255, 255, 255, 0.8);
+          }
+          .login-box input {
+              width: 100%;
+              padding: 14px;
+              border: 2px solid rgba(0, 0, 0, 0.1);
+              border-radius: 10px;
+              font-size: 1rem;
+              margin-bottom: 15px;
+              background: rgba(255, 255, 255, 0.8);
+          }
+          body.dark-mode .login-box input {
+              background: rgba(45, 45, 55, 0.9);
+              border-color: rgba(255, 255, 255, 0.2);
+              color: #ffffff;
+          }
+          .login-box input:focus {
+              outline: none;
+              border-color: var(--primary-color);
+          }
+          .login-box .error-msg {
+              color: #ff3b30;
+              background: rgba(255, 59, 48, 0.1);
+              padding: 10px;
+              border-radius: 8px;
+              margin-bottom: 15px;
+              display: none;
+          }
+          .login-box .error-msg.show {
+              display: block;
+          }
+          #adminContent {
+              display: none;
+          }
+          #adminContent.visible {
+              display: block;
+          }
+          @keyframes shake {
+              0%, 100% { transform: translateX(0); }
+              10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
+              20%, 40%, 60%, 80% { transform: translateX(10px); }
+          }
+      </style>
+<style>
+/* =========================================
+   CINEMATIC GLASS DESIGN SYSTEM
+   ========================================= */
+body.cinematic-glass-theme {
+    background-color: #050508 !important;
+    background-image: 
+        radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.12) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(236, 72, 153, 0.1) 0%, transparent 40%) !important;
+    background-attachment: fixed !important;
+    color: #f8fafc !important;
+}
+
+.cinematic-glass-theme .card, 
+.cinematic-glass-theme .panel, 
+.cinematic-glass-theme .glass-panel, 
+.cinematic-glass-theme .navbar, 
+.cinematic-glass-theme .nav, 
+.cinematic-glass-theme footer,
+.cinematic-glass-theme .footer,
+.cinematic-glass-theme .product-card,
+.cinematic-glass-theme .service-card,
+.cinematic-glass-theme .feature-card,
+.cinematic-glass-theme .stat-card,
+.cinematic-glass-theme .modal-content,
+.cinematic-glass-theme .about-image {
+    background: rgba(15, 15, 25, 0.55) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+    border-radius: 16px !important;
+    color: #f1f5f9 !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease !important;
+}
+
+.cinematic-glass-theme .card:hover, 
+.cinematic-glass-theme .product-card:hover, 
+.cinematic-glass-theme .service-card:hover, 
+.cinematic-glass-theme .feature-card:hover {
+    transform: translateY(-5px) !important;
+    box-shadow: 0 15px 40px rgba(99, 102, 241, 0.25) !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.cinematic-glass-theme h1, 
+.cinematic-glass-theme h2, 
+.cinematic-glass-theme h3,
+.cinematic-glass-theme h4,
+.cinematic-glass-theme h5,
+.cinematic-glass-theme h6 {
+    color: #ffffff !important;
+    letter-spacing: -0.02em !important;
+}
+
+.cinematic-glass-theme p, 
+.cinematic-glass-theme span, 
+.cinematic-glass-theme a,
+.cinematic-glass-theme li {
+    color: #cbd5e1 !important;
+}
+
+.cinematic-glass-theme button, 
+.cinematic-glass-theme .btn,
+.cinematic-glass-theme .btn-primary {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.8), rgba(168, 85, 247, 0.8)) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    color: #fff !important;
+    backdrop-filter: blur(8px) !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.2) !important;
+    transition: all 0.3s ease !important;
+}
+
+.cinematic-glass-theme button:hover, 
+.cinematic-glass-theme .btn:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4) !important;
+    border-color: rgba(255, 255, 255, 0.4) !important;
+}
+
+.cinematic-glass-theme input, 
+.cinematic-glass-theme textarea, 
+.cinematic-glass-theme select {
+    background: rgba(0, 0, 0, 0.3) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: #fff !important;
+    border-radius: 8px !important;
+}
+.cinematic-glass-theme input:focus, 
+.cinematic-glass-theme textarea:focus {
+    border-color: rgba(99, 102, 241, 0.5) !important;
+    outline: none !important;
+}
+</style>
+</head>
+  <body class="cinematic-glass-theme">
+      <!-- Admin Content -->
+      <div id="adminContent">
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">Agency<span>.</span> Admin</a>
+            <ul class="nav-links">
+                <li><a href="index.html">View Site</a></li>
+            </ul>
+             <div class="nav-actions">
+                 <button id="darkModeToggle" class="dark-mode-toggle">
+                     <i class="fas fa-moon"></i>
+                 </button>
+                 <div class="menu-toggle">
+                     <i class="fas fa-bars"></i>
+                 </div>
+             </div>
+        </div>
+    </nav>
+
+    <!-- Admin Panel -->
+    <section class="admin-dashboard">
+        <div class="container">
+            <div class="admin-header">
+                <h1>Complete Website Manager</h1>
+                <p>Edit every element of your website from here</p>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="admin-stats">
+                <div class="admin-stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-briefcase"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="totalServices">0</h3>
+                        <p>Services</p>
+                    </div>
+                </div>
+                <div class="admin-stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="totalTeam">0</h3>
+                        <p>Team Members</p>
+                    </div>
+                </div>
+                <div class="admin-stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="totalMessages">0</h3>
+                        <p>Messages</p>
+                    </div>
+                </div>
+                <div class="admin-stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="totalFeatures">0</h3>
+                        <p>Features</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="admin-section">
+                <div class="section-title">
+                    <h2><i class="fas fa-bolt"></i> Quick Navigation</h2>
+                </div>
+                <div class="quick-actions">
+                    <button class="action-btn" onclick="showSection('hero')">
+                        <i class="fas fa-home"></i> Home/Hero
+                    </button>
+                    <button class="action-btn" onclick="showSection('features')">
+                        <i class="fas fa-star"></i> Features
+                    </button>
+                    <button class="action-btn" onclick="showSection('services')">
+                        <i class="fas fa-briefcase"></i> Services
+                    </button>
+                    <button class="action-btn" onclick="showSection('team')">
+                        <i class="fas fa-users"></i> Team
+                    </button>
+                    <button class="action-btn" onclick="showSection('about')">
+                        <i class="fas fa-info-circle"></i> About Page
+                    </button>
+                    <button class="action-btn" onclick="showSection('stats')">
+                        <i class="fas fa-chart-bar"></i> Stats
+                    </button>
+                    <button class="action-btn" onclick="showSection('contact')">
+                        <i class="fas fa-envelope"></i> Contact
+                    </button>
+                    <button class="action-btn" onclick="showSection('footer')">
+                        <i class="fas fa-columns"></i> Footer
+                    </button>
+                    <button class="action-btn" onclick="showSection('messages')">
+                        <i class="fas fa-inbox"></i> Messages
+                    </button>
+                </div>
+            </div>
+
+            <!-- Hero Section Management -->
+            <div class="admin-section" id="heroSection" style="display: none;">
+                <div class="section-title">
+                    <h2><i class="fas fa-home"></i> Home Page - Hero Section</h2>
+                </div>
+                <div class="admin-card">
+                    <h3>Main Hero Banner</h3>
+                    <form id="heroForm" class="admin-form">
+                        <div class="form-group">
+                            <label>Main Heading (HTML allowed, use &lt;span&gt; for highlighted text)</label>
+                            <input type="text" id="heroTitle" placeholder="We Deliver &lt;span&gt;Exceptional&lt;/span&gt; Services" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Subtitle/Description</label>
+                            <textarea id="heroSubtitle" rows="3" required></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Primary Button Text</label>
+                                <input type="text" id="heroBtn1" placeholder="Our Services" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Primary Button Link</label>
+                                <input type="text" id="heroBtn1Link" placeholder="services.html" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Secondary Button Text</label>
+                                <input type="text" id="heroBtn2" placeholder="Get Started" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Secondary Button Link</label>
+                                <input type="text" id="heroBtn2Link" placeholder="contact.html" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Save Hero Section
+                        </button>
+                    </form>
+                </div>
+
+                <div class="admin-card">
+                    <h3>CTA Section (Call to Action - Bottom of Home)</h3>
+                    <form id="ctaForm" class="admin-form">
+                        <div class="form-group">
+                            <label>CTA Heading</label>
+                            <input type="text" id="ctaHeading" placeholder="Ready to Start Your Project?" required>
+                        </div>
+                        <div class="form-group">
+                            <label>CTA Description</label>
+                            <textarea id="ctaDesc" rows="2" required></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>CTA Button Text</label>
+                                <input type="text" id="ctaBtnText" placeholder="Contact Us" required>
+                            </div>
+                            <div class="form-group">
+                                <label>CTA Button Link</label>
+                                <input type="text" id="ctaBtnLink" placeholder="contact.html" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Save CTA Section
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Features Management -->
+            <div class="admin-section" id="featuresSection" style="display: none;">
+                <div class="section-title">
+                    <h2><i class="fas fa-star"></i> Features Section (Home Page)</h2>
+                </div>
+                <div class="admin-card">
+                    <h3>Edit Features</h3>
+                    <div id="featuresList">
+                        <!-- Features will be loaded here -->
+                    </div>
+                    <button class="btn btn-primary" onclick="addNewFeature()" style="margin-top: 20px;">
+                        <i class="fas fa-plus"></i> Add New Feature
+                    </button>
+                </div>
+            </div>
+
+            <!-- Services Management -->
+            <div class="admin-section" id="servicesSection">
+                <div class="section-title">
+                    <h2><i class="fas fa-briefcase"></i> Services Management</h2>
+                </div>
+
+                <!-- Add Service Form -->
+                <div class="admin-card">
+                    <h3>Add New Service</h3>
+                    <form id="addServiceForm" class="admin-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Service Title</label>
+                                <input type="text" id="serviceTitle" placeholder="e.g., Web Development" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Icon Class (Font Awesome)</label>
+                                <input type="text" id="serviceIcon" placeholder="e.g., fas fa-code" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea id="serviceDescription" rows="4" placeholder="Describe your service..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Add Service
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Services List -->
+                <div class="admin-card">
+                    <h3>Existing Services</h3>
+                    <div class="table-responsive">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Icon</th>
+                                    <th>Title</th>
+                                    <th>Description</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="servicesTableBody">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Team Management -->
+            <div class="admin-section" id="teamSection" style="display: none;">
+                <div class="section-title">
+                    <h2><i class="fas fa-users"></i> Team Members Management</h2>
+                </div>
+
+                <!-- Add Team Member Form -->
+                <div class="admin-card">
+                    <h3>Add New Team Member</h3>
+                    <form id="addTeamForm" class="admin-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Member Name</label>
+                                <input type="text" id="memberName" placeholder="e.g., John Smith" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Role/Position</label>
+                                <input type="text" id="memberRole" placeholder="e.g., CEO & Founder" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Icon Class (Font Awesome)</label>
+                            <input type="text" id="memberIcon" placeholder="fas fa-user" value="fas fa-user" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Add Team Member
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Team Members List -->
+                <div class="admin-card">
+                    <h3>Current Team Members</h3>
+                    <div class="table-responsive">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Icon</th>
+                                    <th>Name</th>
+                                    <th>Role</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="teamTableBody">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- About Page Management -->
+            <div class="admin-section" id="aboutSection" style="display: none;">
+                <div class="section-title">
+                    <h2><i class="fas fa-info-circle"></i> About Page Content</h2>
+                </div>
+                <div class="admin-card">
+                    <h3>Page Header</h3>
+                    <form id="aboutHeaderForm" class="admin-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Page Title</label>
+                                <input type="text" id="aboutPageTitle" placeholder="About Us" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Page Subtitle</label>
+                                <input type="text" id="aboutPageSubtitle" placeholder="Learn more about our company" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Save Header
+                        </button>
+                    </form>
+                </div>
+
+                <div class="admin-card">
+                    <h3>About Section Content</h3>
+                    <form id="aboutContentForm" class="admin-form">
+                        <div class="form-group">
+                            <label>Main Heading</label>
+                            <input type="text" id="aboutHeading" placeholder="Who We Are" required>
+                        </div>
+                        <div class="form-group">
+                            <label>First Paragraph</label>
+                            <textarea id="aboutDesc1" rows="4" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Second Paragraph</label>
+                            <textarea id="aboutDesc2" rows="4" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Save About Content
+                        </button>
+                    </form>
+                </div>
+
+                <div class="admin-card">
+                    <h3>Mission & Vision</h3>
+                    <form id="missionVisionForm" class="admin-form">
+                        <div class="form-group">
+                            <label>Our Mission</label>
+                            <textarea id="aboutMission" rows="3" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Our Vision</label>
+                            <textarea id="aboutVision" rows="3" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Save Mission & Vision
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Stats Management -->
+            <div class="admin-section" id="statsSection" style="display: none;">
+                <div class="section-title">
+                    <h2><i class="fas fa-chart-bar"></i> Statistics Section</h2>
+                </div>
+                <div class="admin-card">
+                    <h3>Edit Statistics</h3>
+                    <div id="statsList">
+                        <!-- Stats will be loaded here -->
+                    </div>
+                    <button class="btn btn-primary" onclick="addNewStat()" style="margin-top: 20px;">
+                        <i class="fas fa-plus"></i> Add New Stat
+                    </button>
+                </div>
+            </div>
+
+            <!-- Contact Page Management -->
+            <div class="admin-section" id="contactSection" style="display: none;">
+                <div class="section-title">
+                    <h2><i class="fas fa-envelope"></i> Contact Page & Information</h2>
+                </div>
+                <div class="admin-card">
+                    <h3>Contact Page Header</h3>
+                    <form id="contactHeaderForm" class="admin-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Page Title</label>
+                                <input type="text" id="contactPageTitle" placeholder="Contact Us" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Page Subtitle</label>
+                                <input type="text" id="contactPageSubtitle" placeholder="Let's discuss your next project" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Save Header
+                        </button>
+                    </form>
+                </div>
+
+                <div class="admin-card">
+                    <h3>Contact Information</h3>
+                    <form id="contactInfoForm" class="admin-form">
+                        <div class="form-group">
+                            <label>Heading</label>
+                            <input type="text" id="contactHeading" placeholder="Get In Touch" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea id="contactDesc" rows="2" required></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Email Address</label>
+                                <input type="email" id="contactEmail" placeholder="hello@agency.com" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Phone Number</label>
+                                <input type="tel" id="contactPhone" placeholder="+1 234 567 890" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Location/Address</label>
+                                <input type="text" id="contactLocation" placeholder="123 Business Street, City, Country" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Working Hours</label>
+                                <input type="text" id="contactHours" placeholder="Mon - Fri: 9AM - 6PM" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Form Title</label>
+                            <input type="text" id="contactFormTitle" placeholder="Send Message" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Save Contact Info
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Footer Management -->
+            <div class="admin-section" id="footerSection" style="display: none;">
+                <div class="section-title">
+                    <h2><i class="fas fa-columns"></i> Footer Settings</h2>
+                </div>
+                <div class="admin-card">
+                    <h3>Footer Content</h3>
+                    <form id="footerForm" class="admin-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Site/Brand Name</label>
+                                <input type="text" id="siteName" placeholder="Agency" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Footer Description</label>
+                                <input type="text" id="footerDesc" placeholder="Professional services for your business growth." required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Copyright Text</label>
+                            <input type="text" id="copyright" placeholder="© 2026 Agency. All rights reserved." required>
+                        </div>
+                        
+                        <h4 style="margin: 25px 0 15px; color: var(--dark-color);">Social Media Links</h4>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Facebook URL</label>
+                                <input type="text" id="socialFacebook" placeholder="#" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Twitter URL</label>
+                                <input type="text" id="socialTwitter" placeholder="#" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Instagram URL</label>
+                                <input type="text" id="socialInstagram" placeholder="#" required>
+                            </div>
+                            <div class="form-group">
+                                <label>LinkedIn URL</label>
+                                <input type="text" id="socialLinkedin" placeholder="#" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Save Footer Settings
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Messages Section -->
+            <div class="admin-section" id="messagesSection" style="display: none;">
+                <div class="section-title">
+                    <h2><i class="fas fa-inbox"></i> Contact Form Messages</h2>
+                </div>
+                <div class="admin-card">
+                    <h3>Received Messages</h3>
+                    <div id="messagesList" class="messages-list">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Edit Service Modal -->
+    <div class="modal" id="editModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Edit Service</h3>
+                <button class="modal-close" onclick="closeModal('editModal')">&times;</button>
+            </div>
+            <form id="editServiceForm" class="admin-form">
+                <input type="hidden" id="editServiceId">
+                <div class="form-group">
+                    <label>Service Title</label>
+                    <input type="text" id="editServiceTitle" required>
+                </div>
+                <div class="form-group">
+                    <label>Icon Class</label>
+                    <input type="text" id="editServiceIcon" required>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="editServiceDescription" rows="4" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Save Changes
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Team Member Modal -->
+    <div class="modal" id="editTeamModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Edit Team Member</h3>
+                <button class="modal-close" onclick="closeModal('editTeamModal')">&times;</button>
+            </div>
+            <form id="editTeamForm" class="admin-form">
+                <input type="hidden" id="editMemberId">
+                <div class="form-group">
+                    <label>Member Name</label>
+                    <input type="text" id="editMemberName" required>
+                </div>
+                <div class="form-group">
+                    <label>Role/Position</label>
+                    <input type="text" id="editMemberRole" required>
+                </div>
+                <div class="form-group">
+                    <label>Icon Class</label>
+                    <input type="text" id="editMemberIcon" required>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Save Changes
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Feature Modal -->
+    <div class="modal" id="editFeatureModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Edit Feature</h3>
+                <button class="modal-close" onclick="closeModal('editFeatureModal')">&times;</button>
+            </div>
+            <form id="editFeatureForm" class="admin-form">
+                <input type="hidden" id="editFeatureId">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Icon Class</label>
+                        <input type="text" id="editFeatureIcon" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Title</label>
+                        <input type="text" id="editFeatureTitle" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="editFeatureDesc" rows="3" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Save Changes
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Stat Modal -->
+    <div class="modal" id="editStatModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Edit Statistic</h3>
+                <button class="modal-close" onclick="closeModal('editStatModal')">&times;</button>
+            </div>
+            <form id="editStatForm" class="admin-form">
+                <input type="hidden" id="editStatId">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Icon Class</label>
+                        <input type="text" id="editStatIcon" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Value</label>
+                        <input type="text" id="editStatValue" placeholder="e.g., 500+" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Label</label>
+                    <input type="text" id="editStatLabel" placeholder="e.g., Projects Completed" required>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Save Changes
+                </button>
+            </form>
+        </div>
+    </div>
+
+    </div>
+    <!-- End Admin Content -->
+
+     <script src="script.js"></script>
+</body>
+</html>
+

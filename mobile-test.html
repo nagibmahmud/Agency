@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Interface Tester - Agency</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .mobile-tester {
+            min-height: 100vh;
+            background: var(--gradient-dark);
+            padding: 20px;
+        }
+
+        .tester-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .tester-header h1 {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .device-selector {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .device-btn {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-md);
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+            color: var(--dark-color);
+        }
+
+        .device-btn:hover,
+        .device-btn.active {
+            background: var(--gradient-primary);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .mobile-frame {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .phone-mockup {
+            background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+            border-radius: 40px;
+            padding: 20px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            margin: 0 auto;
+            position: relative;
+            max-width: 400px;
+        }
+
+        .phone-notch {
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 30px;
+            background: #1a1a1a;
+            border-radius: 0 0 20px 20px;
+            z-index: 2;
+        }
+
+        .punch-hole {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 8px;
+            height: 8px;
+            background: #1a1a1a;
+            border-radius: 50%;
+            z-index: 3;
+            display: none;
+        }
+
+        .phone-screen {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            aspect-ratio: 9/19.5;
+        }
+
+        .screen-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: white;
+        }
+
+        .device-info {
+            text-align: center;
+            margin-top: 20px;
+            color: var(--light-color);
+            font-size: 0.9rem;
+        }
+
+        .custom-size {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+
+        .size-input {
+            width: 80px;
+            padding: 8px 12px;
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-sm);
+            background: var(--glass-bg);
+            color: var(--dark-color);
+            font-size: 0.9rem;
+        }
+
+        .size-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+        }
+
+        .url-input {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .url-input input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-md);
+            background: var(--glass-bg);
+            color: var(--dark-color);
+            font-size: 1rem;
+        }
+
+        .url-input input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+        }
+
+        .url-input button {
+            margin-left: 10px;
+            padding: 12px 20px;
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .url-input button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        @media (max-width: 768px) {
+            .mobile-tester {
+                padding: 10px;
+            }
+
+            .tester-header h1 {
+                font-size: 2rem;
+            }
+
+            .device-selector {
+                gap: 10px;
+            }
+
+            .device-btn {
+                padding: 10px 15px;
+                font-size: 0.9rem;
+            }
+
+            .phone-mockup {
+                padding: 15px;
+            }
+
+            .custom-size {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .size-input {
+                width: 100px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 10px;
+            }
+
+            .device-selector {
+                gap: 5px;
+                margin-bottom: 10px;
+            }
+
+            .device-btn {
+                padding: 6px 10px;
+                font-size: 12px;
+            }
+
+            .custom-size {
+                gap: 5px;
+            }
+
+            .size-input {
+                width: 60px;
+                padding: 6px 8px;
+            }
+
+            .phone-mockup {
+                padding: 10px;
+                max-width: 250px;
+            }
+
+            .device-info {
+                font-size: 0.8rem;
+                margin-top: 10px;
+            }
+        }
+    </style>
+<style>
+/* =========================================
+   CINEMATIC GLASS DESIGN SYSTEM
+   ========================================= */
+body.cinematic-glass-theme {
+    background-color: #050508 !important;
+    background-image: 
+        radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.12) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(236, 72, 153, 0.1) 0%, transparent 40%) !important;
+    background-attachment: fixed !important;
+    color: #f8fafc !important;
+}
+
+.cinematic-glass-theme .card, 
+.cinematic-glass-theme .panel, 
+.cinematic-glass-theme .glass-panel, 
+.cinematic-glass-theme .navbar, 
+.cinematic-glass-theme .nav, 
+.cinematic-glass-theme footer,
+.cinematic-glass-theme .footer,
+.cinematic-glass-theme .product-card,
+.cinematic-glass-theme .service-card,
+.cinematic-glass-theme .feature-card,
+.cinematic-glass-theme .stat-card,
+.cinematic-glass-theme .modal-content,
+.cinematic-glass-theme .about-image {
+    background: rgba(15, 15, 25, 0.55) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+    border-radius: 16px !important;
+    color: #f1f5f9 !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease !important;
+}
+
+.cinematic-glass-theme .card:hover, 
+.cinematic-glass-theme .product-card:hover, 
+.cinematic-glass-theme .service-card:hover, 
+.cinematic-glass-theme .feature-card:hover {
+    transform: translateY(-5px) !important;
+    box-shadow: 0 15px 40px rgba(99, 102, 241, 0.25) !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.cinematic-glass-theme h1, 
+.cinematic-glass-theme h2, 
+.cinematic-glass-theme h3,
+.cinematic-glass-theme h4,
+.cinematic-glass-theme h5,
+.cinematic-glass-theme h6 {
+    color: #ffffff !important;
+    letter-spacing: -0.02em !important;
+}
+
+.cinematic-glass-theme p, 
+.cinematic-glass-theme span, 
+.cinematic-glass-theme a,
+.cinematic-glass-theme li {
+    color: #cbd5e1 !important;
+}
+
+.cinematic-glass-theme button, 
+.cinematic-glass-theme .btn,
+.cinematic-glass-theme .btn-primary {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.8), rgba(168, 85, 247, 0.8)) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    color: #fff !important;
+    backdrop-filter: blur(8px) !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.2) !important;
+    transition: all 0.3s ease !important;
+}
+
+.cinematic-glass-theme button:hover, 
+.cinematic-glass-theme .btn:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4) !important;
+    border-color: rgba(255, 255, 255, 0.4) !important;
+}
+
+.cinematic-glass-theme input, 
+.cinematic-glass-theme textarea, 
+.cinematic-glass-theme select {
+    background: rgba(0, 0, 0, 0.3) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: #fff !important;
+    border-radius: 8px !important;
+}
+.cinematic-glass-theme input:focus, 
+.cinematic-glass-theme textarea:focus {
+    border-color: rgba(99, 102, 241, 0.5) !important;
+    outline: none !important;
+}
+</style>
+</head>
+<body class="cinematic-glass-theme">
+    <div class="mobile-tester">
+        <div class="tester-header">
+            <h1><i class="fas fa-mobile-alt"></i> Mobile Interface Tester</h1>
+            <p>Test your website on different mobile devices</p>
+        </div>
+
+        <div class="url-input">
+            <input type="url" id="websiteUrl" placeholder="Enter website URL" value="index.html">
+            <button onclick="loadWebsite()"><i class="fas fa-play"></i> Load</button>
+        </div>
+
+        <div class="device-selector">
+            <button class="device-btn active" onclick="setDevice('iphone12')">
+                <i class="fas fa-mobile"></i> iPhone 12
+            </button>
+            <button class="device-btn" onclick="setDevice('iphone14')">
+                <i class="fas fa-mobile"></i> iPhone 14
+            </button>
+            <button class="device-btn" onclick="setDevice('samsung')">
+                <i class="fas fa-mobile"></i> Samsung S23
+            </button>
+            <button class="device-btn" onclick="setDevice('pixel')">
+                <i class="fas fa-mobile"></i> Pixel 7
+            </button>
+            <button class="device-btn" onclick="setDevice('tablet')">
+                <i class="fas fa-tablet"></i> iPad
+            </button>
+            <button class="device-btn" onclick="setDevice('honor200')">
+                <i class="fas fa-mobile"></i> Honor 200
+            </button>
+        </div>
+
+        <div class="custom-size">
+            <span style="color: var(--light-color);">Custom Size:</span>
+            <input type="number" class="size-input" id="customWidth" placeholder="Width" value="390">
+            <span style="color: var(--light-color);">×</span>
+            <input type="number" class="size-input" id="customHeight" placeholder="Height" value="844">
+            <button class="device-btn" onclick="setCustomSize()">
+                <i class="fas fa-check"></i> Apply
+            </button>
+        </div>
+
+        <div class="mobile-frame">
+            <div class="phone-mockup">
+                <div class="phone-notch"></div>
+                <div class="phone-screen">
+                    <div class="punch-hole"></div>
+                    <iframe id="mobileIframe" class="screen-iframe" src="index.html"></iframe>
+                </div>
+            </div>
+            <div class="device-info" id="deviceInfo">
+                <strong>iPhone 12</strong> - 390 × 844 pixels
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const devices = {
+            iphone12: { width: 390, height: 844, name: 'iPhone 12', notchType: 'notch' },
+            iphone14: { width: 390, height: 844, name: 'iPhone 14', notchType: 'notch' },
+            samsung: { width: 360, height: 780, name: 'Samsung S23', notchType: 'punch' },
+            pixel: { width: 412, height: 915, name: 'Pixel 7', notchType: 'punch' },
+            tablet: { width: 768, height: 1024, name: 'iPad', notchType: 'none' },
+            honor200: { width: 393, height: 851, name: 'Honor 200', notchType: 'punch' }
+        };
+
+        let currentDevice = 'iphone12';
+
+        function setDevice(deviceKey) {
+            currentDevice = deviceKey;
+            const device = devices[deviceKey];
+
+            // Update active button
+            document.querySelectorAll('.device-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Update notch style
+            const notch = document.querySelector('.phone-notch');
+            const punchHole = document.querySelector('.punch-hole');
+            if (device.notchType === 'notch') {
+                notch.style.display = 'block';
+                punchHole.style.display = 'none';
+            } else if (device.notchType === 'punch') {
+                notch.style.display = 'none';
+                punchHole.style.display = 'block';
+            } else {
+                notch.style.display = 'none';
+                punchHole.style.display = 'none';
+            }
+
+            // Update iframe size
+            updateIframeSize(device.width, device.height);
+
+            // Update device info
+            document.getElementById('deviceInfo').innerHTML = `<strong>${device.name}</strong> - ${device.width} × ${device.height} pixels`;
+
+            // Update custom inputs
+            document.getElementById('customWidth').value = device.width;
+            document.getElementById('customHeight').value = device.height;
+        }
+
+        function setCustomSize() {
+            const width = parseInt(document.getElementById('customWidth').value);
+            const height = parseInt(document.getElementById('customHeight').value);
+
+            if (width && height && width > 0 && height > 0) {
+                updateIframeSize(width, height);
+                document.getElementById('deviceInfo').innerHTML = `<strong>Custom</strong> - ${width} × ${height} pixels`;
+
+                // Remove active class from device buttons
+                document.querySelectorAll('.device-btn').forEach(btn => btn.classList.remove('active'));
+            }
+        }
+
+        function updateIframeSize(width, height) {
+            const iframe = document.getElementById('mobileIframe');
+            const screen = iframe.parentElement;
+
+            // Calculate aspect ratio to fit within mockup
+            const mockupWidth = Math.min(width, 400); // Max width for mockup
+            const scale = mockupWidth / width;
+            const mockupHeight = height * scale;
+
+            screen.style.aspectRatio = `${width} / ${height}`;
+        }
+
+        function loadWebsite() {
+            const url = document.getElementById('websiteUrl').value;
+            if (url) {
+                document.getElementById('mobileIframe').src = url;
+            }
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey || e.metaKey) {
+                switch(e.key) {
+                    case '1':
+                        e.preventDefault();
+                        setDevice('iphone12');
+                        break;
+                    case '2':
+                        e.preventDefault();
+                        setDevice('iphone14');
+                        break;
+                    case '3':
+                        e.preventDefault();
+                        setDevice('samsung');
+                        break;
+                    case '4':
+                        e.preventDefault();
+                        setDevice('pixel');
+                        break;
+                    case '5':
+                        e.preventDefault();
+                        setDevice('tablet');
+                        break;
+                }
+            }
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            setDevice('iphone12');
+        });
+    </script>
+</body>
+</html>
